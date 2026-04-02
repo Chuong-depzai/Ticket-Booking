@@ -28,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="time"
+        android:textStyle="bold"
         android:textColor="@color/blue"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="@+id/logo"

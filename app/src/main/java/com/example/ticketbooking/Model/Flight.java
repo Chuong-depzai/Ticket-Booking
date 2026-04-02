@@ -1,6 +1,7 @@
 package com.example.ticketbooking.Model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Flight implements Serializable {
     private String airlineLogo;
@@ -22,6 +23,7 @@ public class Flight implements Serializable {
 
     private String to;
     private String toShort;
+    private String time;
 
     public Flight() {
 
@@ -143,5 +145,20 @@ public class Flight implements Serializable {
 
     public void setToShort(String toShort) {
         this.toShort = toShort;
+    }
+
+    public int getSeat() {
+        return 0;
+    }
+
+    public void setSeat(int seat) {
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }

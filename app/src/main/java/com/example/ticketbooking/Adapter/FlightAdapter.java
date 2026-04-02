@@ -10,9 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.ticketbooking.Activity.SeatActitivity;
+import com.example.ticketbooking.Activity.SeatListActivity;
 import com.example.ticketbooking.Model.Flight;
-import com.example.ticketbooking.R;
 import com.example.ticketbooking.databinding.ViewholderFlightBinding;
 
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.ViewHolder
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(context, SeatActitivity.class);
+                Intent intent = new Intent(context, SeatListActivity.class);
                 intent.putExtra("flight",flight);
                 context.startActivity(intent);
 

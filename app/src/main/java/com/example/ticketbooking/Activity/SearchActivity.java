@@ -42,7 +42,7 @@ private int numPassenger;
 
     private void setVariable() {
 
-        binding.backbtn.setOnClickListener(v -> finish());
+        binding.backBtn.setOnClickListener(v -> finish());
 
     }
 
