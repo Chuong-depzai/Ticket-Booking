@@ -49,7 +49,7 @@ public class SeatListActivity extends BaseActivity {
 
                 startActivity(intent);
             } else {
-                Toast.makeText(SeatListActivity.this, "Please select your seat", Toast.LENGTH_SHORT).show();
+                Toast.makeText(SeatListActivity.this,"Hãy chọn chỗ ngồi của bạn", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -87,7 +87,7 @@ public class SeatListActivity extends BaseActivity {
                 seatList.add(new Seat(Seat.SeatStatus.EMPLY, String.valueOf(row)));
             } else {
                 String seatName = seatAlphabeMap.get(i % 7) + String.valueOf(row);
-//                seatList.add(new Seat(Seat.SeatStatus.AVAILABLE, seatName));
+                seatList.add(new Seat(Seat.SeatStatus.AVAILABLE, seatName));
                 Seat.SeatStatus seatStatus = flight.getReservedSeats().contains(seatName) ? Seat.SeatStatus.UNAVAILABLE : Seat.SeatStatus.AVAILABLE;
                 seatList.add(new Seat(seatStatus, seatName));
             }
