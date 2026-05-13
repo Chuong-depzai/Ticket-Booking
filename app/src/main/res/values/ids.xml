@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="statusTxt" type="id" />
+    <item name="routeTxt" type="id" />
+    <item name="airlineTxt" type="id" />
+</resources>

@@ -65,8 +65,14 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             // Lấy uid của user vừa tạo
-                            String uid = mAuth.getCurrentUser().getUid();
 
+                            mAuth.getCurrentUser().sendEmailVerification();
+                            Toast.makeText(RegisterActivity.this,
+                                    "Đã gửi email xác thực tới " + email + "\nVui lòng kiểm tra hộp thư!",
+                                    Toast.LENGTH_LONG).show();
+
+                            // Lấy uid của user vừa tạo
+                            String uid = mAuth.getCurrentUser().getUid();
                             // Lưu thêm tên + email vào Realtime Database
                             HashMap<String, Object> userMap = new HashMap<>();
                             userMap.put("name", fullName);

@@ -30,6 +30,14 @@
             android:name=".Activity.RegisterActivity"
             android:exported="false" />
         <activity
+            android:name=".Activity.MyTicketsActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".Activity.ProfileActivity"
+            android:exported="false" />
+        <activity
+
             android:name=".Activity.IntroActivity"
             android:exported="true">
             <intent-filter>

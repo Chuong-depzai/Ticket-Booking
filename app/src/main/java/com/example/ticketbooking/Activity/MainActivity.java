@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -40,6 +41,7 @@ public class MainActivity extends BaseActivity {
         initClassSeat();
         initDatePickup();
         setVariable();
+        setupBottomNav();
 
     }
 
@@ -198,6 +200,21 @@ public class MainActivity extends BaseActivity {
         datePickerDialog.show();
 
         }
+
+    private void setupBottomNav() {
+        binding.chipNav.setOnItemSelectedListener(id -> {
+            if (id == R.id.home) {
+                // Đang ở home
+            } else if (id == R.id.bookmark) {
+                startActivity(new Intent(MainActivity.this, MyTicketsActivity.class));
+            } else if (id == R.id.profile) {
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            } else if (id == R.id.explorer) {
+                android.widget.Toast.makeText(this,
+                        "Tính năng sắp ra mắt!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
 
 }
