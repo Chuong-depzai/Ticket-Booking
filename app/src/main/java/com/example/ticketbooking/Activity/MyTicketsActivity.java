@@ -38,12 +38,18 @@ public class MyTicketsActivity extends BaseActivity {
     }
 
     private void loadMyTickets() {
-        // Lấy uid của user đang đăng nhập
+        // Kiểm tra null trước
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            binding.progressBar.setVisibility(View.GONE);
+            binding.emptyLayout.setVisibility(View.VISIBLE);
+            binding.ticketsRecyclerView.setVisibility(View.GONE);
+            return;
+        }
+
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         binding.progressBar.setVisibility(View.VISIBLE);
 
-        // Query: lấy tất cả booking có userId = uid hiện tại
         FirebaseDatabase.getInstance()
                 .getReference("Bookings")
                 .orderByChild("userId")

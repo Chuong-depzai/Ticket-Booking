@@ -48,26 +48,51 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void loadUserInfo() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        com.google.firebase.auth.FirebaseUser user =
+                com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser();
 
-        // Hiện email trước
-        binding.emailTxt.setText(email);
+        if (user == null) return;
 
-        // Lấy tên từ Firebase Database
-        FirebaseDatabase.getInstance()
+        String uid = user.getUid();
+        String email = user.getEmail();
+
+        // Hiện email ngay
+        binding.emailTxt.setText(email != null ? email : "-");
+
+        // Lấy chữ cái đầu để hiện avatar
+        if (email != null && !email.isEmpty()) {
+            binding.avatarTxt.setText(String.valueOf(email.charAt(0)).toUpperCase());
+        }
+
+        // Lấy tên từ Firebase
+        com.google.firebase.database.FirebaseDatabase.getInstance()
                 .getReference("Users")
                 .child(uid)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    public void onDataChange(@androidx.annotation.NonNull
+                                             com.google.firebase.database.DataSnapshot snapshot) {
                         if (snapshot.exists()) {
                             String name = snapshot.child("name").getValue(String.class);
-                            binding.nameTxt.setText(name != null ? name : "Người dùng");
+                            if (name != null && !name.isEmpty()) {
+                                binding.nameTxt.setText(name);
+                                // Cập nhật avatar theo chữ cái đầu của tên
+                                binding.avatarTxt.setText(
+                                        String.valueOf(name.charAt(0)).toUpperCase());
+                            } else {
+                                binding.nameTxt.setText("Chưa cập nhật tên");
+                            }
+                        } else {
+                            // Không có trong database → dùng email
+                            binding.nameTxt.setText(email != null ? email : "Người dùng");
                         }
                     }
+
                     @Override
-                    public void onCancelled(@NonNull DatabaseError error) {}
+                    public void onCancelled(@androidx.annotation.NonNull
+                                            com.google.firebase.database.DatabaseError error) {
+                        binding.nameTxt.setText("Lỗi tải dữ liệu");
+                    }
                 });
     }
 }

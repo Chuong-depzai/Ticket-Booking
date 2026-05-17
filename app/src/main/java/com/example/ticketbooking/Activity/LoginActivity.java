@@ -42,45 +42,12 @@ public class LoginActivity extends AppCompatActivity {
             binding.progressBar.setVisibility(View.VISIBLE);
             binding.loginBtn.setEnabled(false);
 
-            mAuth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(task -> {
-                        binding.progressBar.setVisibility(View.GONE);
-                        binding.loginBtn.setEnabled(true);
-
-                        if (task.isSuccessful()) {
-                            if (mAuth.getCurrentUser().isEmailVerified()) {
-                                // Đã xác thực → vào app
-                                Toast.makeText(LoginActivity.this,
-                                        "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
-                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
-                            } else {
-                                // Chưa xác thực → báo lỗi + gửi lại email
-                                mAuth.signOut();
-                                new androidx.appcompat.app.AlertDialog.Builder(LoginActivity.this)
-                                        .setTitle("Chưa xác thực email")
-                                        .setMessage("Vui lòng kiểm tra hộp thư và bấm vào link xác thực trước khi đăng nhập.")
-                                        .setPositiveButton("Gửi lại email", (dialog, which) -> {
-                                            // Đăng nhập lại tạm để gửi email
-                                            mAuth.signInWithEmailAndPassword(email, password)
-                                                    .addOnSuccessListener(authResult -> {
-                                                        mAuth.getCurrentUser().sendEmailVerification();
-                                                        mAuth.signOut();
-                                                        Toast.makeText(LoginActivity.this,
-                                                                "Đã gửi lại email xác thực!", Toast.LENGTH_SHORT).show();
-                                                    });
-                                        })
-                                        .setNegativeButton("Đóng", null)
-                                        .show();
-                            }
-                        } else {
-                            Toast.makeText(LoginActivity.this,
-                                    "Sai email hoặc mật khẩu!", Toast.LENGTH_LONG).show();
-                        }
-                    });
+            Toast.makeText(LoginActivity.this,
+                    "Dang nhap thanh cong!", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         });
 
         // Chữ "Quên mật khẩu?"

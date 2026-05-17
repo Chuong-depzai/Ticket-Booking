@@ -40,14 +40,11 @@ public class SeatListActivity extends BaseActivity {
         binding.backBtn.setOnClickListener(v -> finish());
         binding.confrimBtn.setOnClickListener(v -> {
             if (num > 0) {
-                flight.setPassenger(binding.nameSelectedTxt.getText().toString());
-                flight.setPrice(price);
-
-                Intent intent = new Intent(SeatListActivity.this, TicketDetailActivity.class);
-
-                intent.putExtra("flight", flight);
-
-                startActivity(intent);
+                if (num > 0) {
+                    flight.setPassenger(binding.nameSelectedTxt.getText().toString());
+                    flight.setPrice(price);
+                    saveBookingToFirebase();
+                }
             } else {
                 Toast.makeText(SeatListActivity.this,"Hãy chọn chỗ ngồi của bạn", Toast.LENGTH_SHORT).show();
             }
@@ -87,7 +84,7 @@ public class SeatListActivity extends BaseActivity {
                 seatList.add(new Seat(Seat.SeatStatus.EMPLY, String.valueOf(row)));
             } else {
                 String seatName = seatAlphabeMap.get(i % 7) + String.valueOf(row);
-                seatList.add(new Seat(Seat.SeatStatus.AVAILABLE, seatName));
+
                 Seat.SeatStatus seatStatus = flight.getReservedSeats().contains(seatName) ? Seat.SeatStatus.UNAVAILABLE : Seat.SeatStatus.AVAILABLE;
                 seatList.add(new Seat(seatStatus, seatName));
             }
@@ -112,6 +109,56 @@ public class SeatListActivity extends BaseActivity {
 
 
 
+    }
+    private void saveBookingToFirebase() {
+        // Kiểm tra đã đăng nhập chưa
+        com.google.firebase.auth.FirebaseAuth auth =
+                com.google.firebase.auth.FirebaseAuth.getInstance();
+
+        if (auth.getCurrentUser() == null) {
+            // Chưa login → vẫn cho xem vé nhưng không lưu
+            goToTicketDetail();
+            return;
+        }
+
+        String uid = auth.getCurrentUser().getUid();
+
+        // Tạo booking data
+        java.util.HashMap<String, Object> bookingMap = new java.util.HashMap<>();
+        bookingMap.put("userId", uid);
+        bookingMap.put("flightFrom", flight.getFrom());
+        bookingMap.put("flightTo", flight.getTo());
+        bookingMap.put("flightDate", flight.getDate());
+        bookingMap.put("seats", binding.nameSelectedTxt.getText().toString());
+        bookingMap.put("totalPrice", price);
+        bookingMap.put("airlineName", flight.getAirlineName());
+        bookingMap.put("bookingTime", System.currentTimeMillis());
+        bookingMap.put("status", "confirmed");
+
+        // Lưu vào Firebase node "Bookings"
+        binding.confrimBtn.setEnabled(false);
+        binding.confrimBtn.setText("Đang xử lý...");
+
+        database.getReference("Bookings")
+                .push() // Tạo ID tự động
+                .setValue(bookingMap)
+                .addOnCompleteListener(task -> {
+                    binding.confrimBtn.setEnabled(true);
+                    binding.confrimBtn.setText("Chọn Chỗ Ngồi");
+
+                    if (task.isSuccessful()) {
+                        Toast.makeText(SeatListActivity.this,
+                                " Đặt vé thành công!", Toast.LENGTH_SHORT).show();
+                    }
+                    // Dù lưu thành công hay thất bại vẫn chuyển màn
+                    goToTicketDetail();
+                });
+    }
+
+    private void goToTicketDetail() {
+        Intent intent = new Intent(SeatListActivity.this, TicketDetailActivity.class);
+        intent.putExtra("flight", flight);
+        startActivity(intent);
     }
     private void getIntentExtra() {
         flight = (Flight) getIntent().getSerializableExtra("flight");

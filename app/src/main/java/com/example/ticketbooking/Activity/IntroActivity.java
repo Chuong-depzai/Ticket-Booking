@@ -16,8 +16,7 @@ public class IntroActivity extends AppCompatActivity   {
         binding = ActivityIntroBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.startBtn.setOnClickListener(v -> startActivity(new Intent(IntroActivity.this, MainActivity.class)));
-        binding.button4.setOnClickListener(v ->
+        binding.startBtn.setOnClickListener(v -> startActivity(new Intent(IntroActivity.this, RegisterActivity.class)));        binding.button4.setOnClickListener(v ->
                 startActivity(new Intent(IntroActivity.this, LoginActivity.class)));
     }
 

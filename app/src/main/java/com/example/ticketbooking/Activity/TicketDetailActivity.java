@@ -1,5 +1,6 @@
 package com.example.ticketbooking.Activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -32,7 +33,6 @@ public class TicketDetailActivity extends BaseActivity {
     private void setVariable() {
         binding.backBtn.setOnClickListener(v -> finish());
 
-
         binding.fromTxt.setText(flight.getFromShort());
         binding.fromSmallTxt.setText(flight.getFrom());
         binding.toTxt.setText(flight.getTo());
@@ -49,6 +49,26 @@ public class TicketDetailActivity extends BaseActivity {
         Glide.with(TicketDetailActivity.this)
                 .load(flight.getAirlineLogo())
                 .into(binding.logo);
+
+        binding.downloadTicketBtn.setOnClickListener(v -> {
+            new androidx.appcompat.app.AlertDialog.Builder(TicketDetailActivity.this)
+                    .setTitle("Dat ve thanh cong!")
+                    .setMessage(
+                            "Chuyen bay: " + flight.getFrom() + " - " + flight.getTo() + "\n" +
+                                    "Ngay: " + flight.getDate() + "\n" +
+                                    "Ghe: " + flight.getPassenger() + "\n" +
+                                    "Tong tien: $" + flight.getPrice() + "\n\n" +
+                                    "Ve da duoc luu vao muc Ve cua toi.\n" +
+                                    "Chuc ban co chuyen bay vui ve!"
+                    )
+                    .setPositiveButton("Xem ve cua toi", (dialog, which) -> {
+                        Intent intent = new Intent(TicketDetailActivity.this,
+                                MyTicketsActivity.class);
+                        startActivity(intent);
+                    })
+                    .setNegativeButton("Dong", null)
+                    .show();
+        });
     }
 
     private void getIntentExtra() {
