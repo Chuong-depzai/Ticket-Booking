@@ -1,4 +1,4 @@
-package com.example.ticketbooking.Adapter;
+package com.example.ticketbooking.adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,35 +10,33 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.ticketbooking.Activity.SeatListActivity;
-import com.example.ticketbooking.Model.Flight;
+import com.example.ticketbooking.ui.seat.SeatListActivity;
+import com.example.ticketbooking.model.Flight;
 import com.example.ticketbooking.databinding.ViewholderFlightBinding;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.ViewHolder> {
 
-    private ArrayList<Flight> list;
+    private List<Flight> list;
     private Context context;
 
-    public FlightAdapter(ArrayList<Flight> list, Context context) {
+    public FlightAdapter(List<Flight> list, Context context) {
         this.list = list;
         this.context = context;
     }
 
-    public FlightAdapter(ArrayList<Flight> list) {
-        this.list =list;
+    public FlightAdapter(List<Flight> list) {
+        this.list = list;
     }
 
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       context = parent.getContext();
-        ViewholderFlightBinding binding = ViewholderFlightBinding.inflate(LayoutInflater.from(context),parent,false);
+        context = parent.getContext();
+        ViewholderFlightBinding binding = ViewholderFlightBinding.inflate(LayoutInflater.from(context), parent, false);
         return new ViewHolder(binding);
-
-
     }
 
     @Override
@@ -61,21 +59,11 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.ViewHolder
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(context, SeatListActivity.class);
-                intent.putExtra("flight",flight);
+                intent.putExtra("flight", flight);
                 context.startActivity(intent);
-
-
             }
         });
-
-
-
-
-
-
-
     }
 
     @Override
@@ -84,7 +72,6 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         private final ViewholderFlightBinding binding;
 
         public ViewHolder(ViewholderFlightBinding binding) {
@@ -92,7 +79,4 @@ public class FlightAdapter extends RecyclerView.Adapter<FlightAdapter.ViewHolder
             this.binding = binding;
         }
     }
-
-
-
 }

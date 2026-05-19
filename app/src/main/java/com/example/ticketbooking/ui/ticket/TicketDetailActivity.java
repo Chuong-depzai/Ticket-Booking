@@ -1,17 +1,11 @@
-package com.example.ticketbooking.Activity;
+package com.example.ticketbooking.ui.ticket;
 
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
 import com.bumptech.glide.Glide;
-import com.example.ticketbooking.Model.Flight;
-import com.example.ticketbooking.R;
+import com.example.ticketbooking.ui.BaseActivity;
+import com.example.ticketbooking.model.Flight;
 import com.example.ticketbooking.databinding.ActivityTicketDetailBinding;
 
 public class TicketDetailActivity extends BaseActivity {
@@ -22,12 +16,10 @@ public class TicketDetailActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         binding = ActivityTicketDetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         getIntentExtra();
         setVariable();
-
     }
 
     private void setVariable() {
@@ -42,7 +34,7 @@ public class TicketDetailActivity extends BaseActivity {
         binding.timeTxt.setText(flight.getTime());
         binding.arrivalTxt.setText(flight.getArriveTime());
         binding.classTxt.setText(flight.getClassSeat());
-        binding.priceTxt.setText("$" + flight.getPrice());
+        binding.priceTxt.setText(flight.getPrice() + " VND");
         binding.airlines.setText(flight.getAirlineName());
         binding.seatsTxt.setText(flight.getPassenger());
 
@@ -57,7 +49,7 @@ public class TicketDetailActivity extends BaseActivity {
                             "Chuyen bay: " + flight.getFrom() + " - " + flight.getTo() + "\n" +
                                     "Ngay: " + flight.getDate() + "\n" +
                                     "Ghe: " + flight.getPassenger() + "\n" +
-                                    "Tong tien: $" + flight.getPrice() + "\n\n" +
+                                    "Tong tien: " + flight.getPrice() + " VND\n\n" +
                                     "Ve da duoc luu vao muc Ve cua toi.\n" +
                                     "Chuc ban co chuyen bay vui ve!"
                     )

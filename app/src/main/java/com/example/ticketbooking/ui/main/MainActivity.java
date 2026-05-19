@@ -1,4 +1,4 @@
-package com.example.ticketbooking.Activity;
+package com.example.ticketbooking.ui.main;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -8,15 +8,16 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.example.ticketbooking.Model.Location;
+import com.example.ticketbooking.ui.BaseActivity;
+import com.example.ticketbooking.ui.search.SearchActivity;
+import com.example.ticketbooking.ui.ticket.MyTicketsActivity;
+import com.example.ticketbooking.ui.profile.ProfileActivity;
+import com.example.ticketbooking.model.Location;
 import com.example.ticketbooking.R;
+import com.example.ticketbooking.viewmodel.MainViewModel;
 import com.example.ticketbooking.databinding.ActivityMainBinding;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ public class MainActivity extends BaseActivity {
     private Calendar calendar = Calendar.getInstance();
 
     private ActivityMainBinding binding;
+    private MainViewModel mainViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +38,36 @@ public class MainActivity extends BaseActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        initLocations();
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+
+        initLocationsUI();
         initPassenggers();
         initClassSeat();
         initDatePickup();
         setVariable();
         setupBottomNav();
+        setupObservers();
+    }
 
+    private void setupObservers() {
+        mainViewModel.getUserName().observe(this, name -> {
+            if (name != null && !name.isEmpty()) {
+                binding.textView4.setText("Xin chào, " + name);
+            }
+        });
+
+        mainViewModel.getLocations().observe(this, locations -> {
+            if (locations != null) {
+                ArrayAdapter<Location> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, locations);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                binding.fromSp.setAdapter(adapter);
+                binding.toSp.setAdapter(adapter);
+                binding.fromSp.setSelection(1);
+
+                binding.progressBarFrom.setVisibility(View.GONE);
+                binding.progressBarTo.setVisibility(View.GONE);
+            }
+        });
     }
 
     private void setVariable() {
@@ -92,21 +117,16 @@ public class MainActivity extends BaseActivity {
         list.add("Economy Class");
         list.add("First Class");
 
-
         ArrayAdapter<String> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.classSp.setAdapter(adapter);
         binding.progressBarClass.setVisibility(View.GONE);
-
-
     }
 
     private void initPassenggers() {
-
         binding.plusAdultBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 adultPassengers++;
                 binding.AdultTxt.setText(adultPassengers + " Adult");
             }
@@ -114,18 +134,15 @@ public class MainActivity extends BaseActivity {
         binding.minusAdultBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (adultPassengers > 1) {
                     adultPassengers--;
                     binding.AdultTxt.setText(adultPassengers + " Adult");
                 }
             }
-
         });
         binding.plusChildBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 childPassengers++;
                 binding.childTxt.setText(childPassengers + " Child");
             }
@@ -133,60 +150,20 @@ public class MainActivity extends BaseActivity {
         binding.minusChildBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (childPassengers > 0) {
                     childPassengers--;
                     binding.childTxt.setText(childPassengers + " Child");
                 }
             }
-
         });
-
     }
 
-    private void initLocations() {
+    private void initLocationsUI() {
         binding.progressBarFrom.setVisibility(View.VISIBLE);
         binding.progressBarTo.setVisibility(View.VISIBLE);
-        DatabaseReference myRef = database.getReference("Locations");
-
-        ArrayList<Location> list = new ArrayList<>();
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        list.add(dataSnapshot.getValue(Location.class));
-
-                    }
-                    ArrayAdapter<Location> adapter = new ArrayAdapter<>(MainActivity.this, R.layout.sp_item, list);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    binding.fromSp.setAdapter(adapter);
-                    binding.toSp.setAdapter(adapter);
-                    binding.fromSp.setSelection(1);
-
-                    binding.progressBarFrom.setVisibility(View.GONE);
-                    binding.progressBarTo.setVisibility(View.GONE);
-
-
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-
-            }
-
-
-        });
-
-
     }
 
     private void showDatePickerDialog(TextView textView) {
-
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -198,8 +175,7 @@ public class MainActivity extends BaseActivity {
         }, year, month, day);
 
         datePickerDialog.show();
-
-        }
+    }
 
     private void setupBottomNav() {
         binding.chipNav.setOnItemSelectedListener(id -> {
@@ -210,11 +186,8 @@ public class MainActivity extends BaseActivity {
             } else if (id == R.id.profile) {
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
             } else if (id == R.id.explorer) {
-                android.widget.Toast.makeText(this,
-                        "Tính năng sắp ra mắt!", Toast.LENGTH_SHORT).show();
+                android.widget.Toast.makeText(this, "Tính năng sắp ra mắt!", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-
 }

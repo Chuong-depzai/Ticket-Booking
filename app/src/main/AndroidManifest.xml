@@ -10,44 +10,51 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
+
+        <!-- Ticket feature -->
         <activity
-            android:name=".Activity.TicketDetailActivity"
+            android:name=".ui.ticket.TicketDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".Activity.SeatListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.SearchActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.BaseActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.LoginActivity"
+            android:name=".ui.ticket.MyTicketsActivity"
             android:exported="false" />
 
+        <!-- Seat feature -->
         <activity
-            android:name=".Activity.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Activity.MyTicketsActivity"
+            android:name=".ui.seat.SeatListActivity"
             android:exported="false" />
 
+        <!-- Search feature -->
         <activity
-            android:name=".Activity.ProfileActivity"
+            android:name=".ui.search.SearchActivity"
+            android:exported="false" />
+
+        <!-- Auth feature -->
+        <activity
+            android:name=".ui.auth.LoginActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.auth.RegisterActivity"
+            android:exported="false" />
 
-            android:name=".Activity.IntroActivity"
+        <!-- Profile feature -->
+        <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:exported="false" />
+
+        <!-- Intro screen -->
+        <activity
+            android:name=".ui.IntroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Main screen -->
         <activity
-            android:name=".Activity.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:exported="true" />
     </application>
 
